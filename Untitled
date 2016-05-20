@@ -1,0 +1,21 @@
+curl https://hask2-romefeller.c9users.io/cadastro/action/29 \
+-v \
+-X PUT \
+-H "content-type: application/json" \
+-d '{"nome":"Baidu"}'
+
+
+curl <url> \
+-v (ve a requisicao)\
+-X PUT (método http)\
+-H "content-type: application/json" (header da requisicao, se houver necessidade)\
+-d '{"nome":""}' (OS DADOS A SEREM ENVIADOS, JSON)
+
+
+curl https://hask2-romefeller.c9users.io/cadastro/action/26 \
+-v \
+-X DELETE
+
+
+
+data: JSON.stringify({"nome":$("#usuario").val(), "valor":parseFloat($("#valor").val())})
