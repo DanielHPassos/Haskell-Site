@@ -91,6 +91,7 @@ isAdmin = do
 
 getHomeR :: Handler Html
 getHomeR = defaultLayout $ do
+   addStylesheetRemote "http://necolas.github.io/normalize.css/+Sans:300,400,600,700,800"
     
     
 
