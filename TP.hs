@@ -20,15 +20,38 @@ Usuarios json
    sobreNome Text
    deriving Show
 
- json
-    userId Usuarios
-    saldo Double
-    deriving Show
+Saldo json
+   userId Usuarios
+   saldo Double
+   UniqueUsuarios userId
+   deriving Show
+   
+Produtos json
+   descricao Text
+   valor Double
+   deriving Show
+   
+Vendas json
+   userId Usuarios
+   prodId Produtos
+   total Double
+   dataVenda Date
+   UniqueUsuariosProdutos userId prodId
+   deriving Show
+   
+Historico json
+   userId Usuarios
+   valorComprado Double
+   dinheiroGasto Double
+   dataCompra Date
+   UniqueUsuarios userId
+   deriving Show
 
 |]
 
 mkYesod "Pagina" [parseRoutes|
 
+/ HomeR GET
 /login LoginR GET
 /usuario CadastroR GET POST
 
@@ -65,6 +88,11 @@ isAdmin = do
 ------------------------------------------------------
 --Link para o site > https://haskel-cloned-danielhpassos.c9users.io/
 ------------------------------------------------------
+
+getHomeR :: Handler Html
+getHomeR = defaultLayout $ do
+    
+    
 
 postCadastroR :: Handler ()
 postCadastroR = do
