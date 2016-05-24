@@ -35,7 +35,7 @@ Vendas json
    userId Usuarios
    prodId Produtos
    total Double
-   dataVenda Date
+   dataVenda Text
    UniqueUsuariosProdutos userId prodId
    deriving Show
    
@@ -43,8 +43,8 @@ Historico json
    userId Usuarios
    valorComprado Double
    dinheiroGasto Double
-   dataCompra Date
-   UniqueUsuarios userId
+   dataCompra Text
+   UniqueUsuariosH userId
    deriving Show
 
 |]
@@ -65,7 +65,7 @@ mkYesod "Pagina" [parseRoutes|
 --Configuração do BD
 instance YesodPersist Pagina where
    
-   authRoute _ = Just LoginR
+   --authRoute _ = Just LoginR
    
    type YesodPersistBackend Pagina = SqlBackend
    runDB f = do
@@ -73,18 +73,19 @@ instance YesodPersist Pagina where
        let pool = connPool master
        runSqlPool f pool
        
-isUser = do
-    mu <- lookupSession "_ID"
-    return $ case mu of
-        Nothing -> AuthenticationRequired
-        Just _ -> Authorized
+--isUser = do
+--    mu <- lookupSession "_ID"
+--    return $ case mu of
+--        Nothing -> AuthenticationRequired
+--        Just _ -> Authorized
         
-isAdmin = do
-    mu <- lookupSession "_ID"
-    return $ case mu of
-        Nothing -> AuthenticationRequired
-        Just "Admin" -> Authorized
-        Just _ -> Unauthorized "Você tem que ser autorizado"
+--isAdmin = do
+--    mu <- lookupSession "_ID"
+--    return $ case mu of
+--        Nothing -> AuthenticationRequired
+--        Just "Admin" -> Authorized
+--        Just _ -> Unauthorized "Você tem que ser autorizado"
+
 ------------------------------------------------------
 --Link para o site > https://haskel-cloned-danielhpassos.c9users.io/
 ------------------------------------------------------
@@ -92,9 +93,36 @@ isAdmin = do
 getHomeR :: Handler Html
 getHomeR = defaultLayout $ do
    addStylesheetRemote "http://necolas.github.io/normalize.css/+Sans:300,400,600,700,800"
-    
-    
-
+   [whamlet|
+   <body class="center clearfix">
+       <header>
+          <h1>Haskell
+       <section class="chamada">
+           <h2>Que tal fazer compras com moeda virtual?
+           <h3>Sim, aqui isso é possível :D
+       <section class="container">
+           <div class="desktop">
+               <img src="iconecompra.jpg" width="200" height="200" alt="Comprar">
+               <h3>Compra
+               <p>Com cada compra, você ganhará créditos para a próxima compra!.
+           <div class="tablet">
+               <img src="iconepesquisa.jpg" width="200" height="200" alt="Pesquisa">
+               <h3>Pesquisa
+               <p>Pesquisa de itens para comprar! Cada iten pesquisado ficará salvo.
+           <div class="mobile">
+               <img src="iconegrana.jpg" width="200" height="200" alt="DimDim">
+               <h3>Grana
+               <p>Dinheiro virtual para efetuar a compra, quanto mais créditos, melhor !!
+       <footer>
+           <p> Análise e Desenvolvimento de Sistemas - 6º ciclo
+       <nav> 
+           <ul> 
+               <li><a href="#">Sobre
+               <li><a href="#">Autores
+               <li><a href="#">SemIdeia
+   
+   |]
+   
 postCadastroR :: Handler ()
 postCadastroR = do
     usuarios <- requireJsonBody :: Handler Usuarios
