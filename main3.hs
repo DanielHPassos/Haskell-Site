@@ -9,7 +9,7 @@ import Control.Monad.Logger (runStdoutLoggingT)
 
 data Pagina = Pagina{connPool :: ConnectionPool}
 
-instance Yesod Pagina
+instance Yesod Paginadssda
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Clientes json
