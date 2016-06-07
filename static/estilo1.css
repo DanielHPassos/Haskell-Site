@@ -1,0 +1,173 @@
+@charset "utf-8";
+/* CSS Document */
+
+@charset "iso-8859-1";
+/* CSS Document */
+body{
+	background: url(background.jpg);
+	color: #868686;
+	font-family: "Open Sans", Helvetica, sans-serif, arial;
+	font-size: 18px;
+	font-weight: 300;
+	line-height: 22px;
+	text-align: left;
+	text-shadow: 1px 1px 0px #fff;
+}
+.center{
+     margin: 0 auto; 
+     width: 1200px;      
+}
+.clearfix:before, .clearfix:after {
+    content: " "; 
+    display: table; 
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    *zoom: 1;
+}
+
+img, picture, video, embed {
+    max-width: 100%; 
+}
+h1, h2{
+     color: #103754;
+     font-size: 60px;
+     font-weight: 800;
+     letter-spacing: -3px; 
+     line-height: 60px;
+}
+h3{
+     font-size: 32px;
+     font-weight: 300;
+     letter-spacing: -2px; 
+     line-height: 38px;
+}
+p{
+     font-weight: 300;
+     letter-spacing: -1px; 
+}
+a, a:link, a:visited{
+     color:#FE9380; 
+     font-weight:400; 
+     text-decoration:none; 
+}
+a:hover{
+     color:#FE5E41;
+     text-decoration:underline; 
+     text-shadow:none; 
+}
+
+header{
+     border-bottom: 1px solid #E0E0E0; 
+     height:150px;
+     width:1200px; 
+}
+/*
+
+=========================
+nav - menu de navegação
+=========================
+*/
+nav{
+     float:right; /*posiciona menu à direita*/
+     margin-top:78px; /*distância do menu à margem superior do navegador*/
+     text-align:right; /*alinha os links à direita*/
+     width:490px;
+}
+nav ul{
+     list-style-type:none; /*retira os marcadores da lista*/
+}
+     nav li {
+          display: inline; /*deixa o menu na horizontal*/
+     }
+          nav ul li a{
+               margin-right: 30px; /*espaço à direita de cada link do menu*/
+          }
+          nav ul li:nth-child(5) a{
+               margin-right:0px; /*indica que o 5º elemento da lista (contato) terá a margem direita zerada*/
+          }
+nav a:link, nav a:visited{
+     color:#999;
+     font-size: 22px;
+     font-weight: 300;
+     letter-spacing: -2px; /*espaçamento entre as letras*/
+     line-height: 26px;
+     display:inline-block;
+}
+nav a.ativo:link, nav a:hover{
+     color:#FE9380; /*indica a página ativa e o link:hover*/
+}
+/*----------------------------------------------------------
+Seção .CHAMADA <<<<<========================================
+----------------------------------------------------------*/
+.chamada{
+     height:290px;
+     text-align:center;
+     width:1200px;
+}
+     h2 span{
+          font-size: 60px;
+          font-weight: 300;
+          letter-spacing: -2px;
+          line-height: 60px;
+     }
+     .chamada h3 {
+          margin: 0 auto;
+          width:900px;
+     }
+	 /*----------------------------------------------------------
+Seção .CONTAINER - Conteúdo com 3 colunas <<<<<=============
+----------------------------------------------------------*/
+.container{
+     background-color:#103754;
+     height: 240px;
+     padding:30px;
+     max-width:1200px;
+}
+
+
+.container1{
+     background-color:#103754;
+     height: 240px;
+     padding:30px;
+     max-width:200px;
+}
+
+.container h3{
+     color:#fff;
+     font-size: 32px;
+     font-weight: 300;
+     letter-spacing: -2px;
+     margin-bottom: 30px;
+     text-shadow:none;
+}
+.container p{
+     background-color:#fff;
+     float:left;
+     height:160px;
+     padding:7px;
+     position:absolute;
+     width-max:360px;
+     text-align:justify;
+     top:225px;
+}
+
+.container prod {
+	font-style:normal;
+     font-size: 18px;
+     font-weight: 30;
+	 float:left;
+}
+
+.img {
+	display:block;
+	float:left;
+	padding:4px;
+	background:#FFF;
+}
+
+
+	
+
