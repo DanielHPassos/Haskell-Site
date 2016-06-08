@@ -4,8 +4,10 @@
              GeneralizedNewtypeDeriving, ViewPatterns, EmptyDataDecls #-}
 import Yesod
 import Yesod.Static 
+import Yesod.Form.Bootstrap3
 import Database.Persist.Postgresql
 import Data.Text
+import Text.Julius
 import Control.Monad.Logger (runStdoutLoggingT)
 
 data Pagina = Pagina{getStatic :: Static, connPool :: ConnectionPool}
@@ -59,14 +61,18 @@ mkYesod "Pagina" [parseRoutes|
 /adm AdmR GET
 /produtos ProdutoR GET
 /sobre SobreR GET
-/login LoginR GET
+/login LoginR GET POST 
 /logout LogoutR GET
 /static StaticR Static getStatic
 
 
 |]
 
+------------------------------------------------------
+type Form a = Html -> MForm Handler (FormResult a, Widget)
 
+instance RenderMessage Pagina FormMessage where
+    renderMessage _ _ = defaultFormMessage
 ------------------------------------------------------
 --Configuração do BD
 instance YesodPersist Pagina where
@@ -137,20 +143,32 @@ getHomeR = defaultLayout $ do
    
     |]
 
-postCadastroR :: Handler ()
+postCadastroR :: Handler Html
 postCadastroR = do
-    usuarios <- requireJsonBody :: Handler Usuarios
-    runDB $ insert usuarios
-    sendResponse (object [pack "resp" .= pack "Cadastro realizado com sucesso!"])
+    ((result,_),_) <- runFormPost formcadastro
+    case result of 
+     FormSuccess x -> do
+      _ <- runDB $ insert x
+      redirect ProdutoR
+     _ -> redirect CadastroR
+
+
+formcadastro :: Form Usuarios
+formcadastro = renderDivs $ Usuarios
+    <$> areq emailField (bfs ("Email" :: Text)) Nothing
+    <*> areq passwordField (bfs ("Senha" :: Text)) Nothing
+    <*> areq textField (bfs ("Nome" :: Text)) Nothing
+    <*> areq textField (bfs ("SobreNome" :: Text)) Nothing
 
 getCadastroR :: Handler Html
-getCadastroR = defaultLayout $ do
+getCadastroR = do 
+ (widget, enctype) <- generateFormPost formcadastro
+ defaultLayout $ do
   addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
   addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
   addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
   addStylesheetRemote "http://necolas.github.io/normalize.css/+Sans:300,400,600,700,800"
   addStylesheet  $ StaticR estilo_css
-  
   [whamlet|
   <div>
       <div class="navbar navbar-inverse">
@@ -173,8 +191,9 @@ getCadastroR = defaultLayout $ do
                        <img src="http://i.imgur.com/1xtzm4B.png" height="380" width="330" style="alignment-adjust:central;margin-right:25px !important;"> 
               <div class="col-md-2">
               <div class="col-md-8">
-                  <form class="form-horizontal" role="form" method="POST" #form>
-                      <div class="form-group">
+                  <form class="form-horizontal" role="form" method="POST" #form enctype=#{enctype}> 
+                     ^{widget}
+                    <!-- <div class="form-group">
                           Nome: <input type="text" class="form-control" #nome name="nome">
                       <div class="form-group">
                           Sobrenome: <input type="text" class="form-control" #sobreNome name="sobreNome">
@@ -183,9 +202,9 @@ getCadastroR = defaultLayout $ do
                       <div class="form-group">
                           Senha: <input type="password" class="form-control" #pwd name="pwd">
                       <div class="form-group">
-                          Repita a senha: <input type="password" class="form-control" #pwdConfirm>
+                          Repita a senha: <input type="password" class="form-control" #pwdConfirm> -->
                       <div class="form-group">
-                            <button #btn class="btn btn-default">Cadastrar
+                            <button #btn class="btn btn-default">Cadastrar 
         
         <nav> 
            <ul> 
@@ -211,7 +230,6 @@ getAdmR = defaultLayout $ do
                <li><a href="https://aula-5-isabelabg.c9users.io/autor">Autores
                <li><a href="#">SemIdeia
   |]
-  
   
   
 getLogoutR :: Handler Html
@@ -265,17 +283,18 @@ getSobreR = defaultLayout $ do
   
 getProdutoR :: Handler Html
 getProdutoR = defaultLayout $ do
-    addStylesheetRemote "http://necolas.github.io/normalize.css/+Sans:300,400,600,700,800"
+    addStylesheetRemote "//necolas.github.io/normalize.css/+Sans:300,400,600,700,800"
     addStylesheet  $ StaticR estilo1_css
     addStylesheet  $ StaticR style_css
     addStylesheet  $ StaticR jquery_jscrollpane_css
+    addScriptRemote "https://code.jquery.com/jquery-2.2.4.min.js"
+    addScript $ StaticR jquery_mousewheel_js
+    addScript $ StaticR jquery_contentcarousel_js
     
-
    
     [whamlet|
-    <head>
-        <script type="text/javascript" src="@{StaticR jquery_contentcarousel_js}" >
-        <script type="text/javascript" src="@{StaticR jquery_mousewheel_js}" >
+    
+
     <body class="center clearfix" style="background:#F2F2F2;">
     <header>
    
@@ -294,40 +313,40 @@ getProdutoR = defaultLayout $ do
                           <h3> Estojo PacMan 
                           <h4>
                           <span class="ca-quote"> <img src"http://i.imgur.com/DLcGf87.png";>
-                           <span> Estojo com a estampa do jogo "PacMan" 
-                              <a href="#" class="ca-more"> Leia Mais 
-          <div class="ca-content-wrapper">
-              <div class="ca-content">
-                  <h6> Estojo PacMan 
-                      <a href="#" class="ca-close">close
-                      <div class="ca-content-text">
-                          <p> Descrição do produto: Estojo com 1 compartimento,fechos em zíper com puxadores personalizados.
-                          <p> Composição   100% poliéster.
-                          <p> Cores:  Preto, Vermelho e Branco
-                          <p> Dimensões:  22x8x4cm.
-                          <p> Preço: ILS 28,00
-                          <button style="background:#103754; border:#103754;"> <img src="http://i.imgur.com/FjU6yum.png" height="35">
-                                  
-    <div class="ca-item ca-item-2">
-                      <div class="ca-item-main">
-                          <img src="http://i.imgur.com/HVmItOe.jpg" height="220" width="220">
-                          <h3> Pikachu
-                          <h4>
-                          <span class="ca-quote"> <img src"http://i.imgur.com/DLcGf87.png";>
-                           <span> Estojo com a estampa do jogo "PacMan" 
-                              <a href="#" class="ca-more"> Leia Mais 
-          <div class="ca-content-wrapper">
-              <div class="ca-content">
-                  <h6> Estojo PacMan 
-                      <a href="#" class="ca-close">close
-                      <div class="ca-content-text">
-                          <p> Descrição do produto: Estojo com 1 compartimento,fechos em zíper com puxadores personalizados.
-                          <p> Composição   100% poliéster.
-                          <p> Cores:  Preto, Vermelho e Branco
-                          <p> Dimensões:  22x8x4cm.
-                          <p> Preço: ILS 28,00
-                          <button style="background:#103754; border:#103754;"> <img src="http://i.imgur.com/FjU6yum.png" height="35">
-                                  
+                             <span> Estojo com a estampa do jogo "PacMan" 
+                          <span href="#" class="ca-more"> Leia Mais 
+                      <div class="ca-content-wrapper">
+                          <div class="ca-content">
+                              <h6> Estojo PacMan 
+                                  <a href="#" class="ca-close">close
+                                  <div class="ca-content-text">
+                                      <p> Descrição do produto: Estojo com 1 compartimento,fechos em zíper com puxadores personalizados.
+                                      <p> Composição   100% poliéster.
+                                      <p> Cores:  Preto, Vermelho e Branco
+                                      <p> Dimensões:  22x8x4cm.
+                                      <p> Preço: ILS 28,00
+                                      <button style="background:#103754; border:#103754;"> <img src="http://i.imgur.com/FjU6yum.png" height="35">
+                                              
+                  <div class="ca-item ca-item-2">
+                              <div class="ca-item-main">
+                                  <img src="http://i.imgur.com/HVmItOe.jpg" height="220" width="220">
+                                  <h3> Pikachu
+                                  <h4>
+                                  <span class="ca-quote"> <img src"http://i.imgur.com/DLcGf87.png";>
+                                   <span> Estojo com a estampa do jogo "PacMan" 
+                                      <a href="#" class="ca-more"> Leia Mais 
+                      <div class="ca-content-wrapper">
+                          <div class="ca-content">
+                              <h6> Estojo PacMan 
+                                  <a href="#" class="ca-close">close
+                                  <div class="ca-content-text">
+                                      <p> Descrição do produto: Estojo com 1 compartimento,fechos em zíper com puxadores personalizados.
+                                      <p> Composição   100% poliéster.
+                                      <p> Cores:  Preto, Vermelho e Branco
+                                      <p> Dimensões:  22x8x4cm.
+                                      <p> Preço: ILS 28,00
+                                      <button style="background:#103754; border:#103754;"> <img src="http://i.imgur.com/FjU6yum.png" height="35">
+                                              
     
   <nav> 
            <ul> 

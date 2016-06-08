@@ -19,6 +19,8 @@ executable         web
                  , yesod                         >= 1.4.1      && < 1.5
                  , yesod-core                    >= 1.4.6      && < 1.5
                  , yesod-static                  >= 1.4.0.3    && < 1.6
+                 , yesod-form
                  , monad-logger
                  , text
                  , persistent-postgresql
+                 , shakespeare

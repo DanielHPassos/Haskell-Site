@@ -87,7 +87,7 @@
 			},
 			// show / hide the item's more button
 			toggleMore	: function( $item, show ) {
-				( show ) ? $item.find('a.ca-more').show() : $item.find('a.ca-more').hide();	
+				( show ) ? $item.find('.ca-more').show() : $item.find('.ca-more').hide();	
 			},
 			// close all the items
 			// the current one is animated
@@ -192,7 +192,7 @@
 						});
 						
 						// click to open the item(s)
-						$el.find('a.ca-more').live('click.contentcarousel', function( event ) {
+						$el.find('.ca-more').live('click.contentcarousel', function( event ) {
 							if( cache.isAnimating ) return false;
 							cache.isAnimating	= true;
 							$(this).hide();
