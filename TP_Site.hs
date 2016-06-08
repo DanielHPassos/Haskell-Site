@@ -60,6 +60,7 @@ mkYesod "Pagina" [parseRoutes|
 /produtos ProdutoR GET
 /sobre SobreR GET
 /login LoginR GET
+/logout LogoutR GET
 /static StaticR Static getStatic
 
 
@@ -213,6 +214,23 @@ getAdmR = defaultLayout $ do
   
   
   
+getLogoutR :: Handler Html
+getLogoutR = defaultLayout $ do
+    addStylesheetRemote "http://necolas.github.io/normalize.css/+Sans:300,400,600,700,800"
+    addStylesheet  $ StaticR estilo_css
+
+    [whamlet|
+     <body class="center clearfix" style="background:#F2F2F2;">
+    <h2> Obrigado por acessar o BitShop
+    <h3> Volte sempre !  
+    <header>
+  <nav> 
+           <ul> 
+               <li><a href="https://aula-5-isabelabg.c9users.io/sobre">Sobre
+               <li><a href="https://aula-5-isabelabg.c9users.io/autor">Autores
+               <li><a href="#">SemIdeia
+  |]
+  
 getAutorR :: Handler Html
 getAutorR = defaultLayout $ do
     addStylesheetRemote "http://necolas.github.io/normalize.css/+Sans:300,400,600,700,800"
@@ -262,7 +280,6 @@ getProdutoR = defaultLayout $ do
     <header>
    
         <h1> Produtos 
-        
     
     
   <section class="chamada">
