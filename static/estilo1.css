@@ -120,53 +120,22 @@ Seção .CHAMADA <<<<<========================================
 	 /*----------------------------------------------------------
 Seção .CONTAINER - Conteúdo com 3 colunas <<<<<=============
 ----------------------------------------------------------*/
-.container{
+.caixaprincipal{
      background-color:#103754;
-     height: 240px;
+     height: 500px;
      padding:30px;
      max-width:1200px;
 }
 
 
-.container1{
+.caixamini{
      background-color:#103754;
      height: 240px;
      padding:30px;
      max-width:200px;
 }
 
-.container h3{
-     color:#fff;
-     font-size: 32px;
-     font-weight: 300;
-     letter-spacing: -2px;
-     margin-bottom: 30px;
-     text-shadow:none;
-}
-.container p{
-     background-color:#fff;
-     float:left;
-     height:160px;
-     padding:7px;
-     position:absolute;
-     width-max:360px;
-     text-align:justify;
-     top:225px;
-}
 
-.container prod {
-	font-style:normal;
-     font-size: 18px;
-     font-weight: 30;
-	 float:left;
-}
-
-.img {
-	display:block;
-	float:left;
-	padding:4px;
-	background:#FFF;
-}
 
 
 	
